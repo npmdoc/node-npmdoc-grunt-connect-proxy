@@ -1,0 +1,610 @@
+<html><head></head><body><div class="apidocDiv">
+<style>
+/*csslint
+*/
+.apidocDiv {
+    background: #fff;
+    font-family: Arial, Helvetica, sans-serif;
+}
+.apidocDiv a[href] {
+    color: #33f;
+    font-weight: bold;
+    text-decoration: none;
+}
+.apidocDiv a[href]:hover {
+    text-decoration: underline;
+}
+.apidocCodeCommentSpan {
+    background: #bbf;
+    color: #000;
+    display: block;
+}
+.apidocCodeKeywordSpan {
+    color: #d00;
+    font-weight: bold;
+}
+.apidocCodePre {
+    background: #eef;
+    border: 1px solid;
+    color: #777;
+    padding: 5px;
+    white-space: pre-wrap;
+}
+.apidocFooterDiv {
+    margin-top: 20px;
+    text-align: center;
+}
+.apidocModuleLi {
+    margin-top: 10px;
+}
+.apidocSectionDiv {
+    border-top: 1px solid;
+    margin-top: 20px;
+}
+.apidocSignatureSpan {
+    color: #777;
+    font-weight: bold;
+}
+</style>
+<h1>api documentation for
+    <a href="https://github.com/drewzboto/grunt-connect-proxy">grunt-connect-proxy (v0.2.0)</a>
+</h1>
+<h4>Provides a http proxy as middleware for grunt connect.</h4>
+<div class="apidocSectionDiv"><a href="#apidoc.tableOfContents" id="apidoc.tableOfContents"><h1>table of contents</h1></a><ol>
+
+    <li class="apidocModuleLi"><a href="#apidoc.module.grunt-connect-proxy">module grunt-connect-proxy</a><ol>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.grunt-connect-proxy.grunt-connect-proxy">
+            function <span class="apidocSignatureSpan"></span>grunt-connect-proxy
+            <span class="apidocSignatureSpan">(grunt)</span>
+            </a>
+
+        </li>
+
+        <li>
+
+            <span class="apidocSignatureSpan">object <span class="apidocSignatureSpan">grunt-connect-proxy.</span>utils</span>
+
+        </li>
+
+    </ol></li>
+
+    <li class="apidocModuleLi"><a href="#apidoc.module.grunt-connect-proxy.utils">module grunt-connect-proxy.utils</a><ol>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.grunt-connect-proxy.utils.matchContext">
+            function <span class="apidocSignatureSpan">grunt-connect-proxy.utils.</span>matchContext
+            <span class="apidocSignatureSpan">(context, url)</span>
+            </a>
+
+        </li>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.grunt-connect-proxy.utils.processRewrites">
+            function <span class="apidocSignatureSpan">grunt-connect-proxy.utils.</span>processRewrites
+            <span class="apidocSignatureSpan">(rewrites)</span>
+            </a>
+
+        </li>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.grunt-connect-proxy.utils.proxies">
+            function <span class="apidocSignatureSpan">grunt-connect-proxy.utils.</span>proxies
+            <span class="apidocSignatureSpan">()</span>
+            </a>
+
+        </li>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.grunt-connect-proxy.utils.proxyRequest">
+            function <span class="apidocSignatureSpan">grunt-connect-proxy.utils.</span>proxyRequest
+            <span class="apidocSignatureSpan">(req, res, next)</span>
+            </a>
+
+        </li>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.grunt-connect-proxy.utils.registerProxy">
+            function <span class="apidocSignatureSpan">grunt-connect-proxy.utils.</span>registerProxy
+            <span class="apidocSignatureSpan">(proxy)</span>
+            </a>
+
+        </li>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.grunt-connect-proxy.utils.reset">
+            function <span class="apidocSignatureSpan">grunt-connect-proxy.utils.</span>reset
+            <span class="apidocSignatureSpan">()</span>
+            </a>
+
+        </li>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.grunt-connect-proxy.utils.validateRewrite">
+            function <span class="apidocSignatureSpan">grunt-connect-proxy.utils.</span>validateRewrite
+            <span class="apidocSignatureSpan">(rule)</span>
+            </a>
+
+        </li>
+
+    </ol></li>
+
+</ol></div>
+
+<div class="apidocSectionDiv">
+<h1><a href="#apidoc.module.grunt-connect-proxy" id="apidoc.module.grunt-connect-proxy">module grunt-connect-proxy</a></h1>
+
+
+    <h2>
+        <a href="#apidoc.element.grunt-connect-proxy.grunt-connect-proxy" id="apidoc.element.grunt-connect-proxy.grunt-connect-proxy">
+        function <span class="apidocSignatureSpan"></span>grunt-connect-proxy
+        <span class="apidocSignatureSpan">(grunt)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">grunt-connect-proxy = function (grunt) {
+
+  var proxySnippet = require("./lib/utils.js").proxyRequest;
+
+  // Project configuration.
+  grunt.initConfig({
+    jshint: {
+      all: [
+        'Gruntfile.js',
+        'tasks/*.js',
+        'lib/*.js',
+        '&lt;%= nodeunit.tests %&gt;'
+      ],
+      options: {
+        jshintrc: '.jshintrc'
+      }
+    },
+
+    // Before generating any new files, remove any previously-created files.
+    clean: {
+      tests: ['tmp']
+    },
+
+    // Configuration to be run (and then tested).
+    connect: {
+      options: {
+          port: 9000,
+          // change this to '0.0.0.0' to access the server from outside
+          hostname: 'localhost'
+      },
+      proxies:
+      [
+            {
+              context: '/defaults',
+              host: 'www.defaults.com'
+            },
+            {
+              context: '/full',
+              host: 'www.full.com',
+              port: 8080,
+              https: true,
+              xforward: true,
+              rewrite: {
+                '^/full': '/anothercontext'
+              },
+              headers: {
+                "X-Proxied-Header": "added"
+              },
+              ws: true
+            },
+            {
+              context: '/context/test',
+              host: 'www.anothercontext.com',
+              rewrite: {
+                '^/context': '/anothercontext',
+                'test': 'testing'
+              }
+            },
+            {
+              context: '/invalidrewrite',
+              host: 'www.invalidrewrite.com',
+              rewrite: {
+                '^/undefined': undefined,
+                '^/notstring': 13,
+                '^/in': '/thisis'
+              }
+            },
+            {
+              context: '/missinghost'
+            },
+            {
+              host: 'www.missingcontext.com'
+            },
+            {
+              context: ['/array1','/array2'],
+              host: 'www.defaults.com'
+            }
+      ],
+      server2: {
+        proxies: [
+          {
+            context: '/',
+            host: 'www.server2.com'
+          }
+        ]
+      },
+      server3: {
+        appendProxies: false,
+        proxies: [
+          {
+            context: '/server3',
+            host: 'www.server3.com',
+            port: 8080,
+          }
+        ]
+      },
+      request: {
+        options: {
+          middleware: function (connect, options) {
+            return [require('./lib/utils').proxyRequest];
+          }
+        },
+        proxies: [
+          {
+            context: '/request',
+            host: 'localhost',
+            port: 8080,
+            headers: {
+              "x-proxied-header": "added"
+            }
+          },
+          {
+            context: '/hideHeaders',
+            host: 'localhost',
+            port: 8081,
+            hideHeaders: ['x-hidden-header-1', 'x-hidden-header-2']
+          }
+        ]
+      }
+    },
+
+    // Unit tests.
+    nodeunit: {
+      tests: 'test/connect_proxy_test.js',
+      server2: 'test/server2_proxy_test.js',
+      server3: 'test/server3_proxy_test.js',
+      utils: 'test/utils_test.js',
+      request: 'test/request_test.js',
+      hideHeaders: 'test/hide_headers_test.js'
+    }
+
+  });
+
+  // Actually load this plugin's task(s).
+  grunt.loadTasks('tasks');
+
+  // These plugins provide necessary tasks.
+  grunt.loadNpmTasks('grunt-contrib-connect');
+  grunt.loadNpmTasks('grunt-contrib-jshint');
+  grunt.loadNpmTasks('grunt-contrib-clean');
+  grunt.loadNpmTasks('grunt-contrib-nodeunit');
+
+  // Whenever the "test" task is run, first clean the "tmp" dir, then run this
+  // plugin's task(s), then test the result.
+  grunt.registerTask('test', [
+    'clean',
+    'nodeunit:utils',
+    'configureProxies',
+    'nodeunit:tests',
+    'configureProxies:server2',
+    'nodeunit:server2',
+    'configureProxies:server3',
+    'nodeunit:server3',
+    'configureProxies:request',
+    'connect:request',
+    'nodeunit:request',
+    'nodeunit:hideHeaders'
+    ]);
+
+  // specifically test that option inheritance works for multi-level config
+  grunt.registerTask('test-inheritance', [
+    'clean',
+    'configureProxies:serv ...</pre></li>
+    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    </ul>
+
+
+
+
+</div>
+
+<div class="apidocSectionDiv">
+<h1><a href="#apidoc.module.grunt-connect-proxy.utils" id="apidoc.module.grunt-connect-proxy.utils">module grunt-connect-proxy.utils</a></h1>
+
+
+    <h2>
+        <a href="#apidoc.element.grunt-connect-proxy.utils.matchContext" id="apidoc.element.grunt-connect-proxy.utils.matchContext">
+        function <span class="apidocSignatureSpan">grunt-connect-proxy.utils.</span>matchContext
+        <span class="apidocSignatureSpan">(context, url)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">matchContext = function (context, url) {
+    var positiveContexts, negativeContexts, positiveMatch, negativeMatch;
+    var contexts = context;
+    if (!_.isArray(contexts)) {
+        contexts = [contexts];
+    }
+    positiveContexts = _.filter(contexts, function(c){return c.charAt(0) !== '!';});
+    negativeContexts = _.filter(contexts, function(c){return c.charAt(0) === '!';});
+    // Remove the '!' character from the contexts
+    negativeContexts = _.map(negativeContexts, function(c){return c.slice(1);});
+    negativeMatch = _.find(negativeContexts, function(c){return url.lastIndexOf(c, 0) === 0;});
+    // If any context negates this url, it must not be proxied.
+    if (negativeMatch) {
+        return false;
+    }
+    positiveMatch = _.find(positiveContexts, function(c){return url.lastIndexOf(c, 0) === 0;});
+    // If there is any positive match, lets proxy this url.
+    return positiveMatch != null;
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+    return positiveMatch != null;
+};
+
+function onUpgrade(req, socket, head) {
+    var proxied = false;
+
+    proxies.forEach(function(proxy) {
+        if (!proxied &amp;&amp; req &amp;&amp; proxy.config.ws &amp;&amp; utils.<span class="apidocCodeKeywordSpan">matchContext
+</span>(proxy.config.context, req.url)) {
+if (proxy.config.rules.length) {
+    proxy.config.rules.forEach(rewrite(req));
+}
+proxy.server.ws(req, socket, head);
+
+proxied = true;
+...</pre></li>
+    </ul>
+
+
+
+    <h2>
+        <a href="#apidoc.element.grunt-connect-proxy.utils.processRewrites" id="apidoc.element.grunt-connect-proxy.utils.processRewrites">
+        function <span class="apidocSignatureSpan">grunt-connect-proxy.utils.</span>processRewrites
+        <span class="apidocSignatureSpan">(rewrites)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">processRewrites = function (rewrites) {
+    var rules = [];
+
+    Object.keys(rewrites || {}).forEach(function (from) {
+        var rule = {
+            from: from,
+            to: rewrites[from]
+        };
+
+        if (utils.validateRewrite(rule)) {
+            rule.from = new RegExp(rule.from);
+            rules.push(rule);
+            grunt.log.writeln('Rewrite rule created for: [' + rule.from + ' -&gt; ' + rule.to + '].');
+        } else {
+            grunt.log.error('Invalid rule');
+        }
+    });
+
+    return rules;
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+    port: 80,
+    https: false,
+    xforward: false,
+    rules: [],
+    ws: false
+});
+if (validateProxyConfig(proxyOption)) {
+    proxyOption.rules = utils.<span class="apidocCodeKeywordSpan">processRewrites</span>(proxyOption.rewrite);
+    utils.registerProxy({
+      server: httpProxy.createProxyServer({
+        target: proxyOption,
+        secure: proxyOption.https,
+        xfwd: proxyOption.xforward
+      }).on('error', function (err, req, res) {
+        grunt.log.error('Proxy error: ', err.code);
+...</pre></li>
+    </ul>
+
+
+
+    <h2>
+        <a href="#apidoc.element.grunt-connect-proxy.utils.proxies" id="apidoc.element.grunt-connect-proxy.utils.proxies">
+        function <span class="apidocSignatureSpan">grunt-connect-proxy.utils.</span>proxies
+        <span class="apidocSignatureSpan">()</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">proxies = function () {
+    return proxies;
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    </ul>
+
+
+
+    <h2>
+        <a href="#apidoc.element.grunt-connect-proxy.utils.proxyRequest" id="apidoc.element.grunt-connect-proxy.utils.proxyRequest">
+        function <span class="apidocSignatureSpan">grunt-connect-proxy.utils.</span>proxyRequest
+        <span class="apidocSignatureSpan">(req, res, next)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">proxyRequest = function (req, res, next) {
+    var proxied = false;
+
+    enableWebsocket(req.connection.server);
+
+    proxies.forEach(function(proxy) {
+        if (!proxied &amp;&amp; req &amp;&amp; utils.matchContext(proxy.config.context, req.url)) {
+            if (proxy.config.rules.length) {
+                proxy.config.rules.forEach(rewrite(req));
+            }
+            // Add headers present in the config object
+            if (proxy.config.headers != null) {
+                _.forOwn(proxy.config.headers, function(value, key) {
+                    req.headers[key] = value;
+                });
+            }
+
+            proxy.server.proxyRequest(req, res, proxy.server);
+            removeHiddenHeaders(proxy);
+
+            // proxying twice would cause the writing to a response header that is already sent. Bad config!
+            proxied = true;
+
+            var source = req.originalUrl;
+            var target = (proxy.server.options.secure ? 'https://' : 'http://') + proxy.server.options.target.host + ':' + proxy
+.server.options.target.port + req.url;
+            grunt.log.verbose.writeln('Proxied request: ' + source + ' -&gt; ' + target + '\n' + JSON.stringify(req.headers, true,
+2));
+        }
+    });
+    if (!proxied) {
+        next();
+    }
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+// Add headers present in the config object
+if (proxy.config.headers != null) {
+    _.forOwn(proxy.config.headers, function(value, key) {
+        req.headers[key] = value;
+    });
+}
+
+proxy.server.<span class="apidocCodeKeywordSpan">proxyRequest</span>(req, res, proxy.server);
+removeHiddenHeaders(proxy);
+
+// proxying twice would cause the writing to a response header that is already sent. Bad config!
+proxied = true;
+
+var source = req.originalUrl;
+var target = (proxy.server.options.secure ? 'https://' : 'http://') + proxy.server.options.target.host + '
+;:' + proxy.server.options.target.port + req.url;
+...</pre></li>
+    </ul>
+
+
+
+    <h2>
+        <a href="#apidoc.element.grunt-connect-proxy.utils.registerProxy" id="apidoc.element.grunt-connect-proxy.utils.registerProxy">
+        function <span class="apidocSignatureSpan">grunt-connect-proxy.utils.</span>registerProxy
+        <span class="apidocSignatureSpan">(proxy)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">registerProxy = function (proxy) {
+    proxies.push(proxy);
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+    https: false,
+    xforward: false,
+    rules: [],
+    ws: false
+});
+if (validateProxyConfig(proxyOption)) {
+    proxyOption.rules = utils.processRewrites(proxyOption.rewrite);
+    utils.<span class="apidocCodeKeywordSpan">registerProxy</span>({
+      server: httpProxy.createProxyServer({
+        target: proxyOption,
+        secure: proxyOption.https,
+        xfwd: proxyOption.xforward
+      }).on('error', function (err, req, res) {
+        grunt.log.error('Proxy error: ', err.code);
+      }),
+...</pre></li>
+    </ul>
+
+
+
+    <h2>
+        <a href="#apidoc.element.grunt-connect-proxy.utils.reset" id="apidoc.element.grunt-connect-proxy.utils.reset">
+        function <span class="apidocSignatureSpan">grunt-connect-proxy.utils.</span>reset
+        <span class="apidocSignatureSpan">()</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">reset = function () {
+    proxies = [];
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+    }
+    if (proxyOption.https &amp;&amp; proxyOption.port === 80) {
+        grunt.log.warn('Proxy  for ' + proxyOption.context + ' is using https on port 80. Are you sure this is correct
+?');
+    }
+    return true;
+};
+
+utils.<span class="apidocCodeKeywordSpan">reset</span>();
+utils.log = grunt.log;
+if (config) {
+    var connectOptions = grunt.config('connect.'+config) || [];
+    if (typeof connectOptions.appendProxies === 'undefined' || connectOptions.appendProxies) {
+        proxyOptions = proxyOptions.concat(grunt.config('connect.proxies') || []);
+    }
+    proxyOptions = proxyOptions.concat(connectOptions.proxies || []);
+...</pre></li>
+    </ul>
+
+
+
+    <h2>
+        <a href="#apidoc.element.grunt-connect-proxy.utils.validateRewrite" id="apidoc.element.grunt-connect-proxy.utils.validateRewrite">
+        function <span class="apidocSignatureSpan">grunt-connect-proxy.utils.</span>validateRewrite
+        <span class="apidocSignatureSpan">(rule)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">validateRewrite = function (rule) {
+    if (!rule ||
+        typeof rule.from === 'undefined' ||
+        typeof rule.to === 'undefined' ||
+        typeof rule.from !== 'string' ||
+        typeof rule.to !== 'string') {
+        return false;
+    }
+    return true;
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+
+Object.keys(rewrites || {}).forEach(function (from) {
+    var rule = {
+        from: from,
+        to: rewrites[from]
+    };
+
+    if (utils.<span class="apidocCodeKeywordSpan">validateRewrite</span>(rule)) {
+        rule.from = new RegExp(rule.from);
+        rules.push(rule);
+        grunt.log.writeln('Rewrite rule created for: [' + rule.from + ' -&gt; ' + rule.to + '].');
+    } else {
+        grunt.log.error('Invalid rule');
+    }
+});
+...</pre></li>
+    </ul>
+
+
+</div>
+
+<div class="apidocFooterDiv">
+    [ this document was created with
+    <a href="https://github.com/kaizhu256/node-utility2" target="_blank">utility2</a>
+    ]
+</div>
+</div>
+</body></html>
